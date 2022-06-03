@@ -34,7 +34,9 @@ namespace Armagetron.Movement
         {
             if (callback.phase == InputActionPhase.Started)
             {
-                _directionVector = DirectionSelecter.GetDirectionAfterTurn(_currentMoveDirection, TurnDirection.Left);
+                Direction direction = DirectionSelecter.GetDirectionAfterTurn(_currentMoveDirection, TurnDirection.Left);
+                _directionVector = direction.Vector;
+                _currentMoveDirection = direction.EnumValue;
             }
         }
 
@@ -42,7 +44,9 @@ namespace Armagetron.Movement
         {
             if (callback.phase == InputActionPhase.Started)
             {
-                _directionVector = DirectionSelecter.GetDirectionAfterTurn(_currentMoveDirection, TurnDirection.Right);
+                Direction direction = DirectionSelecter.GetDirectionAfterTurn(_currentMoveDirection, TurnDirection.Right);
+                _directionVector = direction.Vector;
+                _currentMoveDirection = direction.EnumValue;
             }
         }
     }

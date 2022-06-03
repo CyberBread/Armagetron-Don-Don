@@ -24,25 +24,40 @@ namespace Armagetron.Movement
             if (turnDirection == TurnDirection.Right)
             {
                 Direction direction;
-                direction.VectorDirection = _directionTurnNodePair[_currentDirection].RightTurn;
-                direction.EnumValueDirection = MoveVectorToMoveDirectionEnum(direction.VectorDirection);
+                direction.Vector = _directionTurnNodePair[_currentDirection].RightTurn;
+                direction.EnumValue = MoveVectorToMoveDirectionEnum(direction.Vector);
                 return direction;
             }
             else
             {
                 Direction direction;
-                direction.VectorDirection = _directionTurnNodePair[_currentDirection].LeftTurn;
-                direction.EnumValueDirection = MoveVectorToMoveDirectionEnum(direction.VectorDirection);
+                direction.Vector = _directionTurnNodePair[_currentDirection].LeftTurn;
+                direction.EnumValue = MoveVectorToMoveDirectionEnum(direction.Vector);
                 return direction;
             }
         }
 
         static private MoveDirection MoveVectorToMoveDirectionEnum(Vector3 vector)
         {
-            switch (vector)
+            if(vector == Vector3.forward)
             {
-                case vector == Vector3.forward:
-                    return MoveDirection.Forward;
+                return MoveDirection.Forward;
+            }
+            else if(vector == Vector3.back)
+            {
+                return MoveDirection.Back;
+            }
+            else if (vector == Vector3.left)
+            {
+                return MoveDirection.Left;
+            }
+            else if (vector == Vector3.right)
+            {
+                return MoveDirection.Right;
+            }
+            else
+            {
+                return MoveDirection.Forward;
             }
         }
 
@@ -50,8 +65,8 @@ namespace Armagetron.Movement
 
     public struct Direction
     {
-        public Vector3 VectorDirection;
-        public MoveDirection EnumValueDirection;
+        public Vector3 Vector;
+        public MoveDirection EnumValue;
     }
 
 
