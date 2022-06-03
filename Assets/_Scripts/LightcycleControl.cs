@@ -12,6 +12,7 @@ namespace Armagetron.Movement
         private CharacterController _characterController;
 
         private MoveDirection _currentMoveDirection;
+
         private Vector3 _directionVector;
 
         private void Awake()
@@ -25,6 +26,7 @@ namespace Armagetron.Movement
         {
             MoveForward();
         }
+
         private void MoveForward()
         {
             _characterController.Move(_directionVector * Time.deltaTime * _speed);
@@ -34,9 +36,11 @@ namespace Armagetron.Movement
         {
             if (callback.phase == InputActionPhase.Started)
             {
-                Direction direction = DirectionSelecter.GetDirectionAfterTurn(_currentMoveDirection, TurnDirection.Left);
-                _directionVector = direction.Vector;
-                _currentMoveDirection = direction.EnumValue;
+                Vector3 newDirection = Vector3.zero;
+                newDirection.x = -_directionVector.z;
+                newDirection.z = _directionVector.x;
+
+                _directionVector = newDirection;
             }
         }
 
@@ -44,9 +48,11 @@ namespace Armagetron.Movement
         {
             if (callback.phase == InputActionPhase.Started)
             {
-                Direction direction = DirectionSelecter.GetDirectionAfterTurn(_currentMoveDirection, TurnDirection.Right);
-                _directionVector = direction.Vector;
-                _currentMoveDirection = direction.EnumValue;
+                Vector3 newDirection = Vector3.zero;
+                newDirection.x = _directionVector.z;
+                newDirection.z = -_directionVector.x;
+
+                _directionVector = newDirection;
             }
         }
     }
