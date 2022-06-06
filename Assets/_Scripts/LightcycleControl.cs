@@ -11,36 +11,30 @@ namespace Armagetron.Movement
 
         private CharacterController _characterController;
 
-        private MoveDirection _currentMoveDirection;
-
-        private Vector3 _directionVector;
+        private Vector3 _moveDirection;
 
         private void Awake()
         {
             _characterController = GetComponent<CharacterController>();
-            _directionVector = Vector3.forward;
-            _currentMoveDirection = MoveDirection.Forward;
+            _moveDirection = Vector3.forward;
         }
 
         private void Update()
         {
-            MoveForward();
+            Move();
         }
 
-        private void MoveForward()
+        private void Move()
         {
-            _characterController.Move(_directionVector * Time.deltaTime * _speed);
+            _characterController.Move(_moveDirection * Time.deltaTime * _speed);
         }
 
         public void TurnLeft(CallbackContext callback)
         {
             if (callback.phase == InputActionPhase.Started)
             {
-                Vector3 newDirection = Vector3.zero;
-                newDirection.x = -_directionVector.z;
-                newDirection.z = _directionVector.x;
-
-                _directionVector = newDirection;
+                ChangeMoveDirectionToLeft();
+                transform.Rotate(new Vector3(0,-90,0));
             }
         }
 
@@ -48,12 +42,27 @@ namespace Armagetron.Movement
         {
             if (callback.phase == InputActionPhase.Started)
             {
-                Vector3 newDirection = Vector3.zero;
-                newDirection.x = _directionVector.z;
-                newDirection.z = -_directionVector.x;
-
-                _directionVector = newDirection;
+                ChangeMoveDirectionToRight();
+                transform.Rotate(new Vector3(0,90,0));
             }
+        }
+
+        private void ChangeMoveDirectionToLeft()
+        {
+            Vector3 newDirection = Vector3.zero;
+            newDirection.x = -_moveDirection.z;
+            newDirection.z = _moveDirection.x;
+
+            _moveDirection = newDirection;
+        }
+
+        private void ChangeMoveDirectionToRight()
+        {
+            Vector3 newDirection = Vector3.zero;
+            newDirection.x = _moveDirection.z;
+            newDirection.z = -_moveDirection.x;
+
+            _moveDirection = newDirection;
         }
     }
 }
