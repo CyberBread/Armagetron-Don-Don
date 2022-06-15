@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using static UnityEngine.InputSystem.InputAction;
@@ -51,8 +52,27 @@ namespace Armagetron.Movement
                 Vector3 newDirection = Vector3.zero;
                 newDirection.x = _directionVector.z;
                 newDirection.z = -_directionVector.x;
-
                 _directionVector = newDirection;
+
+                StartCoroutine(SmoothRotate(0.1f));
+            }
+        }
+
+        private IEnumerator SmoothRotate(float turnTime)
+        {
+            Quaternion fromRotation = transform.rotation;
+            Quaternion toRotaion = fromRotation * Quaternion.Euler(0, 90f, 0);
+
+            float turnStep = 0.1f;
+            float delay = turnTime / (1 / turnStep);
+            float interpolateCoeff = 0f;
+
+            while (interpolateCoeff <= 1f)
+            {
+                interpolateCoeff += turnStep;
+                Quaternion delta = Quaternion.Lerp(fromRotation, toRotaion, interpolateCoeff);
+                transform.rotation = Quaternion.LookRotation(delta.eulerAngles);
+                yield return new WaitForSeconds(delay);
             }
         }
     }
