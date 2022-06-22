@@ -12,23 +12,22 @@ namespace Armagetron.Movement
 
         private CharacterController _characterController;
 
-        private MoveDirection _currentMoveDirection;
-        private Vector3 _directionVector;
+        private Vector3 _moveDirection;
 
         private void Awake()
         {
             _characterController = GetComponent<CharacterController>();
-            _directionVector = Vector3.forward;
-            _currentMoveDirection = MoveDirection.Forward;
+            _moveDirection = Vector3.forward;
         }
 
         private void Update()
         {
-            MoveForward();
+            Move();
         }
-        private void MoveForward()
+
+        private void Move()
         {
-            _characterController.Move(_directionVector * Time.deltaTime * _speed);
+            _characterController.Move(_moveDirection * Time.deltaTime * _speed);
         }
 
         public void TurnLeft(CallbackContext callback)
@@ -36,7 +35,7 @@ namespace Armagetron.Movement
             if (callback.phase == InputActionPhase.Started)
             {
                 ChangeMoveDirectionToLeft();
-                StartCoroutine(SmoothRotate(TurnDirection.Left));
+                transform.Rotate(new Vector3(0,-90,0));
             }
         }
 
@@ -45,29 +44,7 @@ namespace Armagetron.Movement
             if (callback.phase == InputActionPhase.Started)
             {
                 ChangeMoveDirectionToRight();
-                StartCoroutine(SmoothRotate(TurnDirection.Right));
-            }
-        }
-
-        private IEnumerator SmoothRotate(TurnDirection direction, float turnTime = 0.1f)
-        {
-            Quaternion target = Quaternion.identity;
-            switch (direction)
-            {
-                case TurnDirection.Left:
-                    target = transform.rotation * Quaternion.Euler(0, -90f, 0);
-                    break;
-                case TurnDirection.Right:
-                    target = transform.rotation * Quaternion.Euler(0, 90f, 0);
-                    break;
-            }
-
-            float delta = 0.1f;
-            while (delta <= 1)
-            {
-                transform.rotation = Quaternion.Lerp(transform.rotation, target, delta);
-                delta += 0.1F;
-                yield return new WaitForSeconds(0.2f);
+                transform.Rotate(new Vector3(0,90,0));
             }
         }
 
@@ -85,6 +62,7 @@ namespace Armagetron.Movement
             Vector3 newDirection = Vector3.zero;
             newDirection.x = _moveDirection.z;
             newDirection.z = -_moveDirection.x;
+
             _moveDirection = newDirection;
         }
     }
