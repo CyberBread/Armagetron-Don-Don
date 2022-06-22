@@ -1,8 +1,8 @@
 namespace Armagetron.Movement
 {
-    public enum TurnDirection
-    {
-        Left,
-        Right
-    }
+public enum TurnDirection
+{
+    Left,
+    Right
+}
 }
