@@ -44,7 +44,26 @@ namespace Armagetron.Movement
             if (callback.phase == InputActionPhase.Started)
             {
                 ChangeMoveDirectionToRight();
-                transform.Rotate(new Vector3(0,90,0));
+                StartCoroutine(SmoothRotate(0.1f));
+            }
+        }
+
+        private IEnumerator SmoothRotate(float turnTime)
+        {
+            Quaternion fromRotation = transform.rotation;
+            Quaternion toRotaion = fromRotation * Quaternion.Euler(0, 90f, 0);
+
+            float turnStep = 0.1f;
+            float delay = turnTime / (1 / turnStep);
+            float interpolateCoeff = 0f;
+
+            while (interpolateCoeff <= 1f)
+            {
+                interpolateCoeff += turnStep;
+                Quaternion delta = Quaternion.Lerp(fromRotation, toRotaion, interpolateCoeff);
+                transform.rotation = Quaternion.LookRotation(delta.eulerAngles);
+                yield return new WaitForSeconds(delay);
+
             }
         }
 
