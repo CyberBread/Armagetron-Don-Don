@@ -13,13 +13,12 @@ namespace Armagetron.Movement
         private CharacterController _characterController;
 
         private MoveDirection _currentMoveDirection;
-        private Vector3 _directionVector;
+        private Vector3 _moveDirection;
 
         private void Awake()
         {
             _characterController = GetComponent<CharacterController>();
-            _directionVector = Vector3.forward;
-            _currentMoveDirection = MoveDirection.Forward;
+            _moveDirection = Vector3.forward;
         }
 
         private void Update()
@@ -28,7 +27,7 @@ namespace Armagetron.Movement
         }
         private void MoveForward()
         {
-            _characterController.Move(_directionVector * Time.deltaTime * _speed);
+            _characterController.Move(_moveDirection * Time.deltaTime * _speed);
         }
 
         public void TurnLeft(CallbackContext callback)
